@@ -66,6 +66,24 @@ of the break. Badly damaged mechs smoke,
 and below 30% health the new walkers limp. When a walker dies, its limbs blow
 off and the rest of it collapses.
 
+### Your shield and hull
+
+Your robot has a **shield** (blue bar) over its **armor** (red bar). Each shot the
+shield blocks lights up a hex-patterned energy shell, with a ripple spreading from
+the point of impact. When the shield breaks, it shatters into shards. It recharges
+three seconds after you stop taking damage and pulses when it's full again.
+
+Damage that gets through to your hull uses the same plate system as the mechs:
+pieces of your robot are torn off, leaving wired holes with sparking strands.
+Picking up a repair core welds lost plates back on.
+
+### Bullets
+
+Machine guns, the Haze rifle, the Gatling and the Riot arm gun fire physical
+rounds: glowing slugs you can see in flight. Each shot ejects a brass casing
+that bounces and clinks on the ground. Rounds kick up dirt where they land,
+spark off rocks, and whizz audibly when they pass close to you.
+
 ### How the new mechs move
 
 The four new mechs and the boss ship as static models, so the game cuts each one

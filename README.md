@@ -40,12 +40,27 @@ with keyboard only or touch.
 
 ## Gameplay
 
-- 100 mechs arrive in drop waves. Each drop is fired from the mothership as a
-  burning streak, marked on the ground and on radar, and lands with a shockwave.
-- Pelters fight with machine-gun bursts, twin cannons, and lobbed artillery
-  (a red ring shows where it will hit).
-- Destroyed mechs sometimes leave green **repair cores**.
-- The 100th mech is a **Pelter Titan**.
+100 mechs arrive in drop waves. Each drop is fired from the mothership as a
+burning streak, marked on the ground and radar, and lands with a shockwave.
+Destroyed mechs sometimes leave green **repair cores**.
+
+| Mech | Count | Role | Attacks |
+|---|---|---|---|
+| Pelter | 35 | Artillery | MG bursts, twin cannons, lobbed mortars (red ring = impact) |
+| Haze Skirmisher | 22 | Fast flanker | 3-round rifle bursts, purple plasma caster |
+| M-6K Blade | 18 | Melee | Sci-fi sword slashes and long lunges (triangles on radar) |
+| Riot Bruiser | 12 | Heavy | Arm cannon, homing rocket salvos (dash to shake them) |
+| Gatling Warden | 12 | Tank | Spin-up gatling stream, cannon |
+| **The Heartblade** | 1 | **Final boss** | Legless; hovers on a bottom thruster with a red Iris Heart sword |
+
+Heavier mechs unlock as the fight goes on. The Heartblade drops after the
+other 99 are nearly cleared and has three phases:
+
+1. Dash-slash (watch the red line on the ground), spinning blade, and sword waves
+   that skim the ground. **Jump over the waves.**
+2. Below 60%: adds an aerial slam. It rises, locks on (red ring), crashes down
+   and sends out a shockwave. **Jump the shockwave.**
+3. Below 30%: faster, fires more waves, and summons three M-6K Blades.
 
 ## Graphics settings
 

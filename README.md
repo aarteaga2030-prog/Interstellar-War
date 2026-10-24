@@ -53,14 +53,41 @@ Destroyed mechs sometimes leave green **repair cores**.
 | Gatling Warden | 12 | Tank | Spin-up gatling stream, cannon |
 | **The Heartblade** | 1 | **Final boss** | Legless; hovers on a bottom thruster with a red Iris Heart sword |
 
-Heavier mechs unlock as the fight goes on. The Heartblade drops after the
-other 99 are nearly cleared and has three phases:
+Heavier mechs unlock as the fight goes on.
 
-1. Dash-slash (watch the red line on the ground), spinning blade, and sword waves
-   that skim the ground. **Jump over the waves.**
-2. Below 60%: adds an aerial slam. It rises, locks on (red ring), crashes down
-   and sends out a shockwave. **Jump the shockwave.**
-3. Below 30%: faster, fires more waves, and summons three M-6K Blades.
+### Damage you can see
+
+Every mech's armor is real geometry split into plates. Shots tear the plate
+nearest the hit right off the model. It flies away as a physical piece, and the
+spot it came from is left as a dark, sparking hole. Badly damaged mechs smoke,
+and below 30% health the new walkers limp. When a walker dies, its limbs blow
+off and the rest of it collapses.
+
+### How the new mechs move
+
+The four new mechs and the boss ship as static models, so the game cuts each one
+into jointed parts at load time: pelvis, torso, head, upper and lower arms,
+thighs, shins and feet. Legs use two-bone IK with foot planting, so feet step
+and stay put instead of sliding. Arms aim and recoil, torsos twist toward you,
+and every melee swing runs on an eased keyframe timeline.
+
+### The Heartblade
+
+The final boss is a legless mech that hovers on a thruster and carries a red Iris
+Heart sword. It has three phases. Each phase change sets off a roar that blasts
+armor off it and makes its sword grow.
+
+| Attack | Phase | How to survive it |
+|---|---|---|
+| Chained dash-slashes (2, then 3) | 1+ | A red line marks each path. Dash sideways. |
+| Crimson Cyclone (spinning blade that pulls you in) | 1+ | Run or dash away from it. |
+| Sword waves that skim the ground | 1+ | Jump over them. |
+| Meteor Slam, followed by 2–3 shockwave rings | 2+ | Get out of the red ring, then jump each ring. |
+| Heartstorm (spectral swords orbit, then launch) | 2+ | Keep moving. They explode where they land. |
+| Judgement (sky beam, then a sweeping ground beam) | 3 | Jump the beam as it passes. |
+| Blink Strike (teleports behind you) | 3 | Watch for the ring behind you, then dash. |
+
+In phase 3 it also summons three M-6K Blades.
 
 ## Graphics settings
 

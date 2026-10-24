@@ -220,6 +220,7 @@ import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
 import {ShaderPass} from 'three/addons/postprocessing/ShaderPass.js';
 import {OutputPass} from 'three/addons/postprocessing/OutputPass.js';
 import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js';
+import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 
 /* =====================================================================
    CONFIG
@@ -575,6 +576,7 @@ const Audio={ctx:null,master:null,noiseBuf:null,
   emp(){const c=this.ctx;if(!c)return;const t=c.currentTime;this.tone(t,1.1,60,1800,0.35,'sawtooth');this.tone(t+0.05,0.9,3000,80,0.3,'square');this.noise(t,1.2,8000,100,0.5,'lowpass');},
   dash(){const c=this.ctx;if(!c)return;const t=c.currentTime;this.noise(t,0.35,600,4000,0.4,'bandpass',2);},
   hit(){const c=this.ctx;if(!c)return;const t=c.currentTime;this.tone(t,0.05,1900,1700,0.07,'square');},
+  zap(d){const c=this.ctx;if(!c)return;const v=this.vol(d*1.5);const t=c.currentTime;this.noise(t,0.09,9000,2500,0.09*v,'highpass',1);this.tone(t,0.07,140+Math.random()*80,90,0.05*v,'square');},
   kill(){const c=this.ctx;if(!c)return;const t=c.currentTime;this.tone(t,0.09,880,880,0.1,'square');this.tone(t+0.09,0.18,1320,1320,0.1,'square');},
   hurt(){const c=this.ctx;if(!c)return;const t=c.currentTime;this.noise(t,0.12,900,300,0.25);this.tone(t,0.1,220,110,0.15,'triangle');},
   alarm(){const c=this.ctx;if(!c)return;const t=c.currentTime;for(let i=0;i<3;i++){this.tone(t+i*0.32,0.24,620,620,0.13,'square');this.tone(t+i*0.32+0.12,0.12,460,460,0.1,'square');}},
@@ -1491,10 +1493,58 @@ class Gait{
 /* =====================================================================
    ARMOR — real plates torn off the geometry
    ===================================================================== */
-const woundMat=new THREE.MeshStandardMaterial({color:0x17181c,metalness:0.9,roughness:0.55,emissive:new THREE.Color(0.35,0.08,0.02)});
-const woundCoreMat=new THREE.MeshBasicMaterial({color:new THREE.Color(2.2,0.6,0.12)});
-const woundGeo=new THREE.IcosahedronGeometry(1,1);{const p=woundGeo.attributes.position;for(let i=0;i<p.count;i++){const k=0.75+hash2(i*7,i*13,5)*0.5;p.setXYZ(i,p.getX(i)*k,p.getY(i)*k,p.getZ(i)*k);}woundGeo.computeVertexNormals();}
-const woundCoreGeo=new THREE.OctahedronGeometry(1,0);
+/* ---- wounds: packed wiring inside the hole + broken wires hanging out ---- */
+const TLD=new THREE.TextureLoader();
+const srgbTex=t=>{t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=8;return t;};
+const woundMat=new THREE.MeshStandardMaterial({map:srgbTex(TLD.load('assets/wires_cavity.webp')),normalMap:TLD.load('assets/wires_cavity_n.webp'),normalScale:new THREE.Vector2(1.4,1.4),
+  color:new THREE.Color(0.78,0.75,0.72),roughness:0.6,metalness:0.15,envMapIntensity:0.6});
+// four lumpy shells, each showing a different region of the wire-pile photo
+const woundGeos=[0,1,2,3].map(q=>{const g=new THREE.IcosahedronGeometry(1,3);const p=g.attributes.position,uv=g.attributes.uv;
+  for(let i=0;i<p.count;i++){const x=p.getX(i),y=p.getY(i),z=p.getZ(i);const k=0.82+fbm(x*2.1+q*7,y*2.1+z*1.7,3,q+3)*0.4;p.setXYZ(i,x*k,y*k,z*k);
+    uv.setXY(i,(q%2)*0.5+0.02+uv.getX(i)*0.46,0.5-((q>>1)*0.5)+0.02+uv.getY(i)*0.46);}
+  g.computeVertexNormals();return g;});
+const WIRE_TYPES=[{f:'bundle',a:0.746},{f:'yellow',a:0.814},{f:'loop',a:2.133},{f:'frayed',a:0.709}];
+const WIRE_CAP=Math.round(700*Q.part)+150;
+const wireCardGeo=(()=>{const a=new THREE.PlaneGeometry(1,1);a.translate(0,-0.5,0);const b=a.clone();b.rotateY(Math.PI/2);return mergeGeometries([a,b]);})();
+const wireIM=WIRE_TYPES.map(t=>{const mat=new THREE.MeshStandardMaterial({map:srgbTex(TLD.load('assets/wire_'+t.f+'.webp')),color:new THREE.Color(0.82,0.82,0.82),alphaTest:0.5,side:THREE.DoubleSide,roughness:0.55,metalness:0.25,envMapIntensity:0.5});
+  const im=new THREE.InstancedMesh(wireCardGeo,mat,WIRE_CAP);im.instanceMatrix.setUsage(THREE.DynamicDrawUsage);im.frustumCulled=false;im.count=0;scene.add(im);return im;});
+const ZAX=new THREE.Vector3(0,0,1),YAX=new THREE.Vector3(0,1,0),YNEG=new THREE.Vector3(0,-1,0);
+function makeWound(m,r,outDir,pos,parent,extra=0){
+  const w=new THREE.Mesh(woundGeos[(Math.random()*4)|0],woundMat);w.receiveShadow=true;
+  w.quaternion.setFromUnitVectors(ZAX,outDir);w.rotateZ(Math.random()*6.28);
+  w.scale.set(r*0.85,r*0.85,r*0.32);w.position.copy(pos).addScaledVector(outDir,-r*0.3);parent.add(w);m.wounds.push(w);
+  const n=Math.min(5,1+((Math.random()*2.4)|0)+(r>0.45?1:0)+extra);const cards=[];
+  for(let i=0;i<n;i++){let type=(Math.random()*4)|0;if(type===2&&(r<0.3||Math.random()<0.4))type=3;
+    cards.push({type,a:WIRE_TYPES[type].a,len:type===2?r*rand(0.7,1.1):r*rand(0.9,1.8),
+      local:new THREE.Vector3(rand(-0.4,0.4),rand(-0.4,0.4),rand(0.1,0.5)),stiff:type===2?rand(0.04,0.15):rand(0.06,0.55),
+      ph:Math.random()*6.28,f1:rand(1.2,2.6),f2:rand(1.0,2.2),tw:new THREE.Quaternion().setFromAxisAngle(YAX,Math.random()*6.28),
+      dir:new THREE.Vector3(),vel:new THREE.Vector3(),init:false,spark:Math.random()<0.6?1:0.15});}
+  w.userData.cards=cards;w.userData.m=m;return w;
+}
+const _wq=new THREE.Quaternion(),_wp=new THREE.Vector3(),_wo=new THREE.Vector3(),_wd=new THREE.Vector3(),_ws=new THREE.Vector3(),_wm=new THREE.Matrix4();
+function chainVisible(o){while(o){if(!o.visible)return false;if(o===scene)return true;o=o.parent;}return false;}
+function updateWireCards(dt,time){
+  const counts=[0,0,0,0];
+  for(const m of mechs){if(!m.active||!m.wounds||!m.wounds.length)continue;
+    const heavy=m.hp<m.maxHp*0.5,dead=!m.alive;
+    for(const w of m.wounds){const cards=w.userData.cards;if(!cards||!chainVisible(w))continue;
+      w.updateWorldMatrix(true,false);_wo.copy(ZAX).transformDirection(w.matrixWorld);
+      for(const c of cards){if(counts[c.type]>=WIRE_CAP)continue;
+        _wp.copy(c.local).applyMatrix4(w.matrixWorld);
+        _wd.copy(_wo).multiplyScalar(c.stiff).addScaledVector(YNEG,1-c.stiff);
+        _wd.x+=Math.sin(time*c.f1+c.ph)*0.16;_wd.z+=Math.cos(time*c.f2+c.ph)*0.16;_wd.normalize();
+        if(!c.init){c.dir.copy(_wd);c.init=true;}
+        c.vel.addScaledVector(_wd.sub(c.dir),Math.min(dt,0.05)*38);c.vel.multiplyScalar(Math.exp(-dt*4.5));c.dir.addScaledVector(c.vel,Math.min(dt,0.05)).normalize();
+        _wq.setFromUnitVectors(YNEG,c.dir).multiply(c.tw);
+        _wm.compose(_wp,_wq,_ws.set(c.len*c.a,c.len,c.len*c.a));wireIM[c.type].setMatrixAt(counts[c.type]++,_wm);
+        // live wires arc at the tips
+        if(c.type!==2&&(!dead||m.t<5)&&Math.random()<dt*(heavy?2.6:1.0)*c.spark){const tip=_wp.addScaledVector(c.dir,c.len*0.9);
+          for(let i=0;i<5*PF+1;i++)fxAdd.emit(tip.x,tip.y,tip.z,rand(-3,3),rand(-1,4),rand(-3,3),rand(0.15,0.4),0.12,0.03,3,5,10,1,0.8,1.4,3,0,0.6,GRAV*0.7,0);
+          fxAdd.emit(tip.x,tip.y,tip.z,0,0,0,0.07,0.4,1.4,3,5,10,1,0,0,0,0);
+          const d=camera.position.distanceTo(tip);if(d<22&&Math.random()<0.35)Audio.zap(d);}
+      }}}
+  for(let i=0;i<wireIM.length;i++){const im=wireIM[i];im.count=counts[i];if(counts[i]){im.instanceMatrix.needsUpdate=true;im.instanceMatrix.clearUpdateRanges();im.instanceMatrix.addUpdateRange(0,counts[i]*16);}}
+}
 const plates=[];const MAX_PLATES=Math.round(70*Q.part)+20;
 function spawnPlate(obj,vel,spin,disposeAll){
   if(plates.length>=MAX_PLATES){const old=plates.shift();killPlate(old);}
@@ -1542,9 +1592,8 @@ function rigDetachPlate(m,hitW,dirW,force=1){
   const vel=new THREE.Vector3().copy(out).multiplyScalar(rand(5,10)*force);if(dirW)vel.addScaledVector(dirW,rand(4,9)*force);vel.y+=rand(4,9);
   spawnPlate(holder,vel,new THREE.Vector3(rand(-1,1),rand(-1,1),rand(-1,1)).multiplyScalar(rand(4,12)),false);
   // wound left behind
-  const sz=_cs.copy(best.max).sub(best.min);const r=Math.max(0.18,Math.min(sz.x+sz.y+sz.z,m.H*0.35)/3*0.75);
-  const w=new THREE.Mesh(woundGeo,woundMat);w.position.copy(best.center);w.scale.setScalar(r);w.rotation.set(Math.random()*6,Math.random()*6,0);
-  const core=new THREE.Mesh(woundCoreGeo,woundCoreMat);core.scale.setScalar(0.22);w.add(core);g.add(w);m.wounds.push(w);
+  const sz=_cs.copy(best.max).sub(best.min);const r=Math.max(0.16,Math.min(sz.x+sz.y+sz.z,m.H*0.24)/3*0.7);
+  const outL=out.clone().applyQuaternion(g.getWorldQuaternion(_cq).invert());makeWound(m,r,outL,best.center,g);
   const hp=holder.position;impactSpark(hp,out,[8,4,1.2],10);fxAdd.emit(hp.x,hp.y,hp.z,0,0,0,0.12,r*3,r*6,8,4,1.5,1,0,0,0,0);
   if(camera.position.distanceTo(hp)<60)Audio.noise(Audio.ctx?Audio.ctx.currentTime:0,0.18,3000,600,0.12*Audio.vol(camera.position.distanceTo(hp)),'bandpass',1.5);
   return true;
@@ -1552,6 +1601,8 @@ function rigDetachPlate(m,hitW,dirW,force=1){
 // detach a whole limb (on death)
 function rigDetachLimb(m,name,force=1){
   const R=m.rig,g=R.seg[name];if(!g||!g.parent||!R.tpl.segs[name])return;R.detached=R.detached||new Set();R.detached.add(name);
+  {const h=R.homes[name];const jd=h.pos.lengthSq()>1e-4?h.pos.clone().normalize():new THREE.Vector3(0,-1,0);const rr=clamp(m.H*0.045,0.25,0.7);
+    makeWound(m,rr,jd,h.pos,h.parent,2);makeWound(m,rr*0.9,jd.clone().negate(),new THREE.Vector3(),g,1);}
   const holder=new THREE.Object3D();g.updateMatrixWorld(true);g.matrixWorld.decompose(holder.position,holder.quaternion,_cs);
   scene.add(holder);holder.attach(g);g.position.set(0,0,0);g.quaternion.identity();scene.remove(holder);
   holder.userData.r=m.H*0.15;
@@ -1570,9 +1621,8 @@ function clearWounds(m){for(const w of m.wounds)w.parent&&w.parent.remove(w);m.w
 function woundFx(m,dt){
   if(!m.wounds.length)return;const heavy=m.hp<m.maxHp*0.5;
   for(const w of m.wounds){if(Math.random()>dt*(heavy?6:2.5))continue;w.getWorldPosition(_cw);
-    if(Math.random()<0.6){for(let i=0;i<3;i++)fxAdd.emit(_cw.x,_cw.y,_cw.z,rand(-3,3),rand(0,5),rand(-3,3),rand(0.2,0.5),0.12,0.04,8,4,1.4,1,2,0.6,0.1,0,0.6,GRAV*0.7,0);}
+    if(Math.random()<0.25){for(let i=0;i<2;i++)fxAdd.emit(_cw.x,_cw.y,_cw.z,rand(-2,2),rand(0,3),rand(-2,2),rand(0.2,0.4),0.1,0.03,8,4,1.4,1,2,0.6,0.1,0,0.6,GRAV*0.7,0);}
     if(heavy&&Math.random()<0.5)fxSmoke.emit(_cw.x,_cw.y,_cw.z,rand(-.3,.3),rand(1,2.5),rand(-.3,.3),rand(1.5,3),0.5,2.6,.08,.075,.07,.6,.2,.19,.18,0,0.3,-0.4,0.1);}
-  woundCoreMat.color.setRGB(2.0+Math.sin(gameTime*23)*0.8,0.55,0.12);
 }
 
 /* skinned armor (Pelter): sort each skinned mesh's triangles into plates once on the template */
@@ -1608,8 +1658,7 @@ function skinnedDetachPlate(m,hitW,dirW,force=1){
   spawnPlate(holder,vel,new THREE.Vector3(rand(-1,1),rand(-1,1),rand(-1,1)).multiplyScalar(rand(4,12)),true);
   // wound on nearest bone
   let nb=null,nd=1e9;for(const b of m.bonesList){b.getWorldPosition(_cw);const d=_cw.distanceToSquared(center);if(d<nd){nd=d;nb=b;}}
-  const r=Math.max(0.2,Math.min(geo.boundingSphere.radius*0.7,m.H*0.12));const w=new THREE.Mesh(woundGeo,woundMat);w.scale.setScalar(r);
-  const core=new THREE.Mesh(woundCoreGeo,woundCoreMat);core.scale.setScalar(0.22);w.add(core);w.position.copy(center);scene.add(w);nb.attach(w);m.wounds.push(w);
+  const r=Math.max(0.2,Math.min(geo.boundingSphere.radius*0.7,m.H*0.12));const w=makeWound(m,r,out.clone(),center,scene);nb.attach(w);
   impactSpark(center,out,[8,4,1.2],10);return true;
 }
 function armorHit(m,dmg,hitW,dirW){
@@ -2639,7 +2688,7 @@ function frame(){
     updateEnemyShots(dt);updateShockwaves(dt);updateBolts(dt);updateLanceBeams(dt);updateArcs(dt);updatePickups(dt,t);
     for(const f of fighters){f.update(dt);f.draw();}
     updateSkyBolts(dt);updateMegaBeams(dt);updateAmbience(dt,t);
-    updateDebris(dt);updatePlates(dt);updateWarnRings(dt,t);updateFlashes(dt);
+    updateDebris(dt);updatePlates(dt);updateWireCards(dt,t);updateWarnRings(dt,t);updateFlashes(dt);
     fxAdd.update(dt);fxFire.update(dt);fxSmoke.update(dt);fxRing.update(dt);clouds.update(0);
     if(gameState==='intro')updateIntro(dt);else if(!window.__lock)updateCamera(dt);
     tracers.flush();

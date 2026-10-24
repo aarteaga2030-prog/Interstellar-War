@@ -59,7 +59,10 @@ Heavier mechs unlock as the fight goes on.
 
 Every mech's armor is real geometry split into plates. Shots tear the plate
 nearest the hit right off the model. It flies away as a physical piece, and the
-spot it came from is left as a dark, sparking hole. Badly damaged mechs smoke,
+hole it leaves shows packed internal wiring (`assets/wires_cavity.webp`). Broken
+wire strands (`assets/wire_*.webp`) hang out of each hole, swing as the mech
+moves, and arc with sparks at their tips. Severed limbs show wiring at both ends
+of the break. Badly damaged mechs smoke,
 and below 30% health the new walkers limp. When a walker dies, its limbs blow
 off and the rest of it collapses.
 

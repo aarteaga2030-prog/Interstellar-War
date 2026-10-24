@@ -54,7 +54,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#05070b;color:var(--
 #feed div{margin-bottom:4px;color:#ffd1d1;text-shadow:0 1px 3px #000;animation:feedIn .25s ease-out}
 #feed div.good{color:var(--green)}#feed div.blue{color:var(--blue2)}
 @keyframes feedIn{from{transform:translateX(30px);opacity:0}to{transform:none;opacity:1}}
-#msg{position:absolute;top:26%;left:0;right:0;text-align:center;font-family:'Orbitron';font-weight:900;
+#msg{position:absolute;top:29%;left:0;right:0;text-align:center;font-family:'Orbitron';font-weight:900;
   font-size:30px;letter-spacing:.2em;color:#fff;text-shadow:0 0 20px rgba(255,70,70,.7);opacity:0;transition:opacity .3s}
 #msg small{display:block;font-family:'Rajdhani';font-size:16px;letter-spacing:.3em;font-weight:600;color:#ffb0b0;margin-top:6px}
 #msg.blue{text-shadow:0 0 20px rgba(80,170,255,.8)}#msg.blue small{color:var(--blue2)}
@@ -2119,11 +2119,12 @@ const BOSS_MOVES={
       {t:1.12,fn:b=>{if(meleeHit(b,9.5,1.4,160,16))impactSpark(player.pos.clone().add(TMP.v2.set(0,1.4,0)),UP,[9,1,0.6],20);}}],
     tick:(b,dt,time)=>{if(!b.hidden)faceTo(b,player.pos.x,player.pos.z,dt,4);b.hoverTo(b.alt,4,dt,time);}},
 };
-function roarFx(b){const c=b.torsoCenter(new THREE.Vector3());fxRing.emit(c.x,c.y,c.z,0,0,0,1.0,4,90,9,1,0.6,1,2,0.2,0.1,0);fxRing.emit(c.x,b.groundY()+0.5,c.z,0,0,0,1.3,4,70,6,0.8,0.4,1,1,0,0,0);
-  flash(c,0xff2030,90,1.0,90);addShake(c,3.5);Audio.boom(camera.position.distanceTo(c),3);Audio.tone(Audio.ctx?Audio.ctx.currentTime:0,1.6,90,40,0.4,'sawtooth');
+function roarFx(b){const c=b.torsoCenter(new THREE.Vector3());fxRing.emit(c.x,c.y,c.z,0,0,0,1.0,4,60,2.6,0.3,0.2,1,0.6,0.05,0.03,0);fxRing.emit(c.x,b.groundY()+0.5,c.z,0,0,0,1.3,4,70,2.2,0.3,0.15,1,0.4,0,0,0);
+  flash(c,0xff2030,35,0.8,70);addShake(c,3.5);Audio.boom(camera.position.distanceTo(c),3);Audio.tone(Audio.ctx?Audio.ctx.currentTime:0,1.6,90,40,0.4,'sawtooth');
   for(let i=0;i<80*PF+10;i++){const v=TMP.v.set(rand(-1,1),rand(-0.3,1),rand(-1,1)).normalize().multiplyScalar(rand(10,30));fxAdd.emit(c.x,c.y,c.z,v.x,v.y,v.z,rand(0.4,1),1,0.1,8,0.7,0.5,1,0,0,0,0,1,0,0);}}
 
-function hasLOS(a,b){const steps=10;for(let i=1;i<steps;i++){const t=i/steps;const x=a.x+(b.x-a.x)*t,y=a.y+(b.y-a.y)*t,z=a.z+(b.z-a.z)*t;if(terrainH(x,z)>y+0.5)return false;}return true;}
+function hasLOS(a,b){const steps=12;for(let i=1;i<steps;i++){const t=i/steps;const x=a.x+(b.x-a.x)*t,y=a.y+(b.y-a.y)*t,z=a.z+(b.z-a.z)*t;if(terrainH(x,z)>y+0.5)return false;
+  for(const c of colliders){if(y<c.top-0.5){const dx=x-c.x,dz=z-c.z;if(dx*dx+dz*dz<c.r*c.r*0.64)return false;}}}return true;}
 
 /* enemy projectiles */
 const enemyShots=[];

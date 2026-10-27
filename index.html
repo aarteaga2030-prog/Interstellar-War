@@ -3217,7 +3217,7 @@ function frame(){
     const lowHp=player.alive&&player.hp<player.maxHp*0.25?0.35+0.15*Math.sin(t*6):0;
     gradePass.uniforms.uHurt.value=Math.min(1,hurtFx+lowHp);gradePass.uniforms.uTime.value=t;gradePass.uniforms.uOD.value=player.odT>0?1:0;
   }
-  composer.render(dt);
+  if(!window.__norender)composer.render(dt);
   if(gameState==='play'||gameState==='pause'){updateHUD(dt);drawRadar();}
   drawOverlay(dt);
   // dynamic resolution
@@ -3320,7 +3320,7 @@ document.querySelectorAll('#qualRow .sel').forEach(s=>{s.classList.toggle('on',s
   frame();
 })();
 // expose for testing
-window.THREE=THREE;window.__game={NET,hostRoom,joinRoom,hurt:(d,s)=>hurtPlayer(d,s),PD,repair:()=>playerRepair(),RIG_TPL,plates,spawnType:(t,x,z,st='fight')=>{const m=getMech(t);m.spawn(x,z);if(st){m.state=st;m.t=0;if(m.boss){m.pos.y=terrainH(x,z)+m.alt;m.state='hover';m.mv=null;bossRef=m;document.getElementById('bossBar').classList.add('on');}else m.pos.y=terrainH(x,z);}return m;},input,aimInfo,player,mechs,get state(){return gameState;},set state(v){gameState=v;},startGame,queueDrop,camera,cam,fighters};
+window.THREE=THREE;window.__game={NET,hostRoom,joinRoom,withTarget,pushShot,hurt:(d,s)=>hurtPlayer(d,s),PD,repair:()=>playerRepair(),RIG_TPL,plates,spawnType:(t,x,z,st='fight')=>{const m=getMech(t);m.spawn(x,z);if(st){m.state=st;m.t=0;if(m.boss){m.pos.y=terrainH(x,z)+m.alt;m.state='hover';m.mv=null;bossRef=m;document.getElementById('bossBar').classList.add('on');}else m.pos.y=terrainH(x,z);}return m;},input,aimInfo,player,mechs,get state(){return gameState;},set state(v){gameState=v;},startGame,queueDrop,camera,cam,fighters};
 </script>
 </body>
 </html>

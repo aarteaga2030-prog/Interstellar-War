@@ -1021,6 +1021,7 @@ function setupRobot(g){
   const root=g.scene;root.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;o.material.envMapIntensity=1.2;}});
   setupPlayerArmor(root);
   const pivot=new THREE.Group();pivot.add(root);scene.add(pivot);
+  g.animations[0].tracks=g.animations[0].tracks.filter(t=>!t.name.includes('morphTargetInfluences'));
   const mixer=new THREE.AnimationMixer(root);const clip=g.animations[0];
   const walk=mixer.clipAction(clip);const idle=mixer.clipAction(clip.clone());
   walk.play();idle.play();walk.timeScale=0;idle.timeScale=0;idle.time=0.35;walk.setEffectiveWeight(0);idle.setEffectiveWeight(1);
@@ -2625,8 +2626,9 @@ async function hostRoom(){
     peer.on('connection',conn=>{
       conn.on('open',()=>{if(NET.conns.size>=3){sendTo(conn,{t:'full'});setTimeout(()=>conn.close(),300);return;}
         let slot=1;while(NET.conns.has(slot))slot++;NET.conns.set(slot,conn);conn._slot=slot;addRemote(slot,'OFFICER',slot);
-        sendTo(conn,{t:'welcome',slot,code:NET.code});sendRoster();if(gameState==='play'||gameState==='intro')sendTo(conn,{t:'start'});});
-      conn.on('data',d=>{if(conn._slot)hostRecv(conn._slot,d);});
+        sendTo(conn,{t:'welcome',slot,code:NET.code});sendRoster();if(gameState==='play'||gameState==='intro')sendTo(conn,{t:'start'});
+        if(conn._pending){for(const d of conn._pending)hostRecv(slot,d);conn._pending=null;}});
+      conn.on('data',d=>{if(conn._slot)hostRecv(conn._slot,d);else(conn._pending=conn._pending||[]).push(d);});
       conn.on('close',()=>{const s=conn._slot;if(s==null)return;conn._slot=null;NET.conns.delete(s);const rp=NET.players.get(s);if(rp)feed(rp.name+' LEFT','');removeRemote(s);sendRoster();});
       conn.on('error',()=>{});});
     peer.on('disconnected',()=>{try{peer.reconnect();}catch(e){}});};
@@ -2656,7 +2658,7 @@ function hostLost(){if(NET.lost)return;NET.lost=true;NET.connected=false;mpStatu
   if(gameState==='play'||gameState==='intro'||gameState==='pause'){showMsg('HOST DISCONNECTED','');setTimeout(()=>endGame(false,'CONNECTION LOST'),1500);}}
 function clientRecv(msg){
   switch(msg.t){
-    case 'welcome':NET.myId=msg.slot;NET.connected=true;lobbyRefresh();break;
+    case 'welcome':NET.myId=msg.slot;NET.connected=true;toHost({t:'hello',n:NET.myName});lobbyRefresh();break;
     case 'full':mpStatus('That room is full (4 officers max).','bad');break;
     case 'roster':{const keep=new Set();for(const [s,n,c] of msg.l){if(s===NET.myId)continue;keep.add(s);addRemote(s,n,c);}
       for(const s of [...NET.players.keys()])if(!keep.has(s))removeRemote(s);lobbyRefresh();break;}

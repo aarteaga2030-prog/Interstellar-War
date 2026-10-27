@@ -20,6 +20,37 @@ python3 -m http.server 8000
 
 It also works on **GitHub Pages**: Settings → Pages → Deploy from branch → `main` / root.
 
+## Co-op multiplayer (up to 4 players)
+
+Multiplayer runs peer-to-peer over WebRTC using [PeerJS](https://peerjs.com).
+Nothing to install, and no game server to run.
+
+1. Everyone opens the game from the same hosted copy, such as GitHub Pages.
+2. One player types a callsign and clicks **HOST**. A 4-letter room code appears.
+3. Everyone else types that code and clicks **JOIN**.
+4. When the squad is in, the host clicks **DEPLOY SQUAD**.
+
+You can also share a direct link: `…/index.html?room=ABCD` fills in the code.
+
+How it works:
+
+- **The host runs the war.** Spawns, mech AI, mech health and kills are decided on
+  the host's machine and streamed to everyone about 15 times per second.
+- **You control your own robot.** Movement and aiming are instant. Enemy bullets
+  and blasts are simulated on every screen, so you dodge on your own screen.
+- **Mechs attack the nearest officer**, and drops land near random squad members.
+  More players means more mechs on the field at once.
+- **Downed officers redeploy after 8 seconds** next to a teammate. The mission
+  fails only if the whole squad is down at the same time.
+- Teammates appear as color-tinted robots with nametags. They show on radar and
+  in the top-left squad list with their shield and armor.
+- Pause is disabled in co-op.
+
+If the host leaves, the game ends for everyone. Some strict networks (certain
+school or office Wi-Fi) block WebRTC peer connections. If joining hangs, try a
+different network. Multiplayer doesn't work in the published Claude preview page,
+because that page blocks WebRTC.
+
 ## Controls
 
 | Action | Keyboard / mouse | Touch |

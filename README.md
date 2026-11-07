@@ -7,6 +7,38 @@ unit **RX-9 Peacekeeper**, dropped alone onto a scorched alien plain while an
 enemy mothership hangs in the sky and deploys 100 Pelter artillery mechs to
 crush you. Overhead, fighter squadrons dogfight the whole time.
 
+## Modes
+
+- **Campaign: The Last Peacekeeper.** A six-chapter story with briefings, in-mission
+  radio dialogue, debriefs, and an epilogue. Chapters unlock one at a time and your
+  progress is saved in the browser.
+- **1v100 Assault.** The original mode: all 100 mechs and the Heartblade in one fight.
+
+## Story
+
+Kharon IV is a rust-red mining colony of forty thousand people. Before dawn, a Concordat
+enforcement carrier called the **ARBITER** parks overhead. The intelligence that runs it,
+**the Magistrate**, announces that the colony's charter has been sold and the settlers
+will be removed. Its bailiff mechs are already dropping.
+
+Eleven of Precinct 9's twelve officers board the evacuation shuttles. **RX-9 Peacekeeper**
+stays. Dispatcher **Lt. Mara Okonkwo** finds a loophole in Concordat law: Statute Nine
+voids a clearance order if a lawful local authority routes the force enforcing it. That
+makes one police robot the only thing standing between the Magistrate and the colony.
+
+| # | Chapter | Objective | What's new |
+|---|---|---|---|
+| I | Landfall | Destroy 12 Pelters | Basics, first notice from the Magistrate |
+| II | The Haze Line | Destroy 18 hostiles | Haze flankers; Skylance squadron and Capt. Idris Vale arrive |
+| III | Cold Steel | Destroy 22 hostiles | M-6K Blades, built from salvaged Constabulary parts |
+| IV | Exodus | Survive 2:30 | Heavy mechs pin the evac pads; Skylance bombs the field at the end |
+| V | The Long Night | Destroy 32 hostiles | Night battle, the whole reserve, heavier beam strikes |
+| VI | Heartblade | Clear the escort, defeat the boss | The executioner, and who is inside it |
+
+Each chapter has its own time of day and weather, its own enemy mix, and its own
+spawn pacing. Radio calls are set off by kills, elapsed time, the survival countdown,
+boss phases, and low armor.
+
 ## Play
 
 Open `index.html` through any static web server. It loads models from `assets/`,
@@ -40,7 +72,7 @@ with keyboard only or touch.
 
 ## Gameplay
 
-100 mechs arrive in drop waves. Each drop is fired from the mothership as a
+In 1v100 Assault, 100 mechs arrive in drop waves. Each drop is fired from the mothership as a
 burning streak, marked on the ground and radar, and lands with a shockwave.
 Destroyed mechs sometimes leave green **repair cores**.
 

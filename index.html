@@ -83,7 +83,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:#05070b;color:var(--
 .card{background:var(--panel);border:1px solid var(--line);padding:22px 26px;max-width:720px;width:calc(100% - 32px);backdrop-filter:blur(6px)}
 .controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:6px 22px;font-size:15px;color:var(--dim);font-weight:600}
 .controls b{color:var(--ink);font-family:'Orbitron';font-size:11px;letter-spacing:.08em;display:inline-block;min-width:118px}
-.screen{overflow-y:auto;padding:24px 0}
+.screen{overflow-y:auto;padding:24px 0;justify-content:flex-start}
+.screen>:first-child{margin-top:auto}.screen>:last-child{margin-bottom:auto}
 @media (max-height:640px){.title{font-size:40px}.tag{margin:8px 0 14px}.card{padding:14px 18px}.row{margin-top:12px}}
 .row{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:22px}
 button,.sel{font-family:'Orbitron';font-weight:700;letter-spacing:.2em;font-size:14px;color:#fff;cursor:pointer;
@@ -112,6 +113,53 @@ button:disabled{opacity:.4;cursor:default;filter:none}
   font-family:'Orbitron';font-size:10px;letter-spacing:.08em;display:flex;align-items:center;justify-content:center;color:#fff}
 .tb.fire{width:96px;height:96px;font-size:13px;border-color:rgba(255,120,120,.7);background:rgba(60,10,10,.35)}
 .tb.act{background:rgba(120,190,255,.45)}
+
+/* ---------- Story / campaign ---------- */
+#objLine{font-family:'Orbitron';font-size:11px;letter-spacing:.2em;color:var(--amber);margin-top:6px;display:none}
+#objLine.on{display:block}
+#comms{position:absolute;left:50%;bottom:26px;transform:translateX(-50%) translateY(12px);width:min(520px,calc(100vw - 760px));min-width:340px;
+  display:flex;gap:12px;align-items:flex-start;background:rgba(4,10,20,.78);border:1px solid var(--line);border-left:3px solid var(--c,#7fc8ff);
+  padding:10px 14px 12px 10px;opacity:0;transition:opacity .35s,transform .35s;backdrop-filter:blur(4px)}
+#comms.on{opacity:1;transform:translateX(-50%)}
+#comms .pf{flex:0 0 52px;height:52px;border:1px solid var(--c,#7fc8ff);display:flex;align-items:center;justify-content:center;position:relative;
+  font-family:'Orbitron';font-weight:900;font-size:17px;color:var(--c,#7fc8ff);background:repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 2px,transparent 2px 4px);
+  text-shadow:0 0 10px var(--c,#7fc8ff);overflow:hidden}
+#comms .pf:after{content:'';position:absolute;left:0;right:0;height:30%;background:linear-gradient(180deg,transparent,rgba(255,255,255,.12),transparent);animation:scan 1.6s linear infinite}
+@keyframes scan{from{top:-30%}to{top:100%}}
+#comms .wv{position:absolute;bottom:3px;left:6px;right:6px;height:8px;display:flex;gap:2px;align-items:flex-end}
+#comms .wv i{flex:1;background:var(--c,#7fc8ff);opacity:.7;height:20%}
+#comms.talk .wv i{animation:wave .5s ease-in-out infinite alternate}
+#comms .wv i:nth-child(2){animation-delay:-.2s}#comms .wv i:nth-child(3){animation-delay:-.35s}#comms .wv i:nth-child(4){animation-delay:-.1s}#comms .wv i:nth-child(5){animation-delay:-.4s}
+@keyframes wave{from{height:15%}to{height:100%}}
+#comms .who{font-family:'Orbitron';font-size:11px;letter-spacing:.18em;color:var(--c,#7fc8ff);font-weight:700}
+#comms .who span{color:var(--dim);font-weight:500;margin-left:8px;font-size:9px}
+#comms .txt{font-size:16px;font-weight:600;line-height:1.3;color:var(--ink);margin-top:4px;min-height:21px}
+@media (max-width:1100px){#msg{top:40%}#comms{left:16px;right:216px;width:auto;min-width:0;bottom:auto;top:138px;transform:translateY(-8px)}#comms.on{transform:none}}
+@media (max-width:980px){#comms{top:138px}#comms .txt{font-size:14px}#comms .pf{flex-basis:40px;height:40px;font-size:13px}}
+.menuBtns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.kicker{font-family:'Orbitron';font-size:12px;letter-spacing:.42em;color:var(--amber);text-align:center}
+#chapList{display:grid;gap:8px;max-width:720px;width:calc(100% - 32px)}
+.chap{display:grid;grid-template-columns:96px 1fr auto;gap:14px;align-items:center;padding:12px 16px;background:var(--panel);border:1px solid var(--line);
+  cursor:pointer;transition:border-color .15s,background .15s;text-align:left}
+.chap:hover{border-color:rgba(140,210,255,.8);background:rgba(20,40,70,.65)}
+.chap .cn{font-family:'Orbitron';font-size:11px;letter-spacing:.2em;color:var(--dim)}
+.chap .ct{font-family:'Orbitron';font-weight:900;font-size:17px;letter-spacing:.12em;color:#fff}
+.chap .cs{font-size:14px;color:var(--dim);font-weight:600;margin-top:2px}
+.chap .cst{font-family:'Orbitron';font-size:10px;letter-spacing:.18em;color:var(--green)}
+.chap.locked{cursor:default;opacity:.42}.chap.locked:hover{border-color:var(--line);background:var(--panel)}
+.chap.locked .cst{color:var(--dim)}
+.chap.next .cst{color:var(--amber)}
+#brief .card{max-width:760px}
+#bLoc{font-family:'Orbitron';font-size:11px;letter-spacing:.28em;color:var(--dim);margin-bottom:14px}
+#bText p,#endStory p,#epiText p{font-size:18px;line-height:1.5;font-weight:500;color:#d6e4f3;margin-bottom:12px;opacity:0;animation:pIn .7s ease-out forwards}
+@keyframes pIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+#bObj{margin-top:6px;padding:10px 14px;border:1px solid rgba(255,179,71,.45);background:rgba(255,179,71,.07);font-family:'Orbitron';font-size:12px;letter-spacing:.14em;color:var(--amber)}
+#bObj b{color:#fff;margin-right:10px}
+#endStory{max-width:640px;width:calc(100% - 32px);margin-bottom:16px}
+#endStory p{font-size:17px}
+#epiText{max-width:680px;width:calc(100% - 32px)}
+#epiText p.fin{font-family:'Orbitron';font-weight:900;font-size:28px;letter-spacing:.4em;text-align:center;color:#fff;margin-top:20px;text-shadow:0 0 18px rgba(80,170,255,.6)}
+@media (max-width:640px){.chap{grid-template-columns:1fr;gap:4px}#bText p,#epiText p{font-size:16px}}
 </style>
 </head>
 <body>
@@ -124,12 +172,15 @@ button:disabled{opacity:.4;cursor:default;filter:none}
     <div id="remain" class="mono">100</div>
     <div id="remainLbl">HOSTILE MECHS REMAINING</div>
     <div id="subinfo">ACTIVE <b id="activeN">0</b> &nbsp;·&nbsp; INBOUND <b id="inboundN">0</b> &nbsp;·&nbsp; <b id="timeN">0:00</b></div>
+    <div id="objLine"></div>
   </div>
   <div id="odBanner">◆ RIOT OVERDRIVE ◆</div>
   <div id="bossBar"><div class="bn"><span>THE HEARTBLADE</span><span id="bossPh">PHASE 1</span></div><div class="bb"><i></i></div></div>
   <div id="radarWrap"><canvas id="radar" width="380" height="380"></canvas></div>
   <div id="feed"></div>
   <div id="msg"></div>
+  <div id="comms"><div class="pf"><span id="cG">MO</span><div class="wv"><i></i><i></i><i></i><i></i><i></i></div></div>
+    <div style="flex:1;min-width:0"><div class="who" id="cWho">DISPATCH<span>PRECINCT 9</span></div><div class="txt" id="cTxt"></div></div></div>
   <div id="boundary">⚠ RETURN TO COMBAT ZONE ⚠</div>
   <div id="vitals">
     <div id="callsign">UNIT RX-9 · PEACEKEEPER</div>
@@ -179,19 +230,46 @@ button:disabled{opacity:.4;cursor:default;filter:none}
       <span class="sel" data-q="low">LOW</span><span class="sel" data-q="medium">MEDIUM</span>
       <span class="sel on" data-q="high">HIGH</span><span class="sel" data-q="ultra">ULTRA</span>
     </div>
-    <div class="row"><button class="big" id="playBtn" disabled>DEPLOY</button></div>
+    <div class="row menuBtns"><button class="big" id="playBtn" disabled>CAMPAIGN</button><button class="big" id="assaultBtn" disabled>1v100 ASSAULT</button></div>
     <div style="display:flex;flex-direction:column;align-items:center"><div id="loadbar"><i></i></div><div id="loadtxt">LOADING ASSETS 0%</div></div>
   </div>
 </div>
 
 <div class="screen hide" id="pause">
   <div class="title" style="font-size:56px">PAUSED</div>
-  <div class="row"><button id="resumeBtn">RESUME</button><button id="restartBtn2">RESTART</button></div>
+  <div class="row"><button id="resumeBtn">RESUME</button><button id="restartBtn2">RESTART</button><button id="menuBtn2">ABANDON</button></div>
+</div>
+
+<div class="screen hide" id="chapters">
+  <div class="kicker">CAMPAIGN</div>
+  <div class="title" style="font-size:clamp(30px,5vw,60px);margin:8px 0 6px">THE LAST PEACEKEEPER</div>
+  <div class="tag" style="margin:6px 0 22px">KHARON IV · ONE NIGHT · ONE OFFICER</div>
+  <div id="chapList"></div>
+  <div class="row"><button id="chapBack">BACK</button></div>
+</div>
+
+<div class="screen hide" id="brief">
+  <div class="kicker" id="bCode">CHAPTER I</div>
+  <div class="title" id="bTitle" style="font-size:clamp(34px,6vw,72px);margin:8px 0 22px">LANDFALL</div>
+  <div class="card">
+    <div id="bLoc"></div>
+    <div id="bText"></div>
+    <div id="bObj"></div>
+    <div class="row"><button id="briefBack">BACK</button><button class="big" id="briefGo">DEPLOY</button></div>
+  </div>
+</div>
+
+<div class="screen hide" id="epilogue">
+  <div class="kicker">EPILOGUE</div>
+  <div class="title" style="font-size:clamp(30px,5vw,60px);margin:8px 0 24px">PRECINCT 9</div>
+  <div id="epiText"></div>
+  <div class="row"><button class="big" id="epiBtn">RETURN TO MENU</button></div>
 </div>
 
 <div class="screen hide" id="end">
   <div class="title" id="endTitle">SECTOR SECURED</div>
   <div class="tag" id="endTag">ALL HOSTILES NEUTRALIZED</div>
+  <div id="endStory"></div>
   <div class="card" style="max-width:460px">
     <div class="stats">
       <span>Mechs destroyed</span><b id="sKills">0</b>
@@ -199,7 +277,7 @@ button:disabled{opacity:.4;cursor:default;filter:none}
       <span>Accuracy</span><b id="sAcc">0%</b>
       <span>Damage taken</span><b id="sDmg">0</b>
     </div>
-    <div class="row"><button class="big" id="restartBtn">DEPLOY AGAIN</button></div>
+    <div class="row" id="endBtns"></div>
   </div>
 </div>
 
@@ -2281,11 +2359,264 @@ function updatePickups(dt,time){for(const k of pickups){if(!k.active)continue;k.
 let gameState='menu',gameTime=0,killed=0,spawned=0,titanSpawned=false,dropTimer=0,aggroTimer=0,bossRef=null;
 const QUOTA_BASE={pelter:35,haze:22,m6k:18,riot:12,military:12};let quota={...QUOTA_BASE};
 const UNLOCK={pelter:0,haze:0,m6k:6,riot:12,military:20};
-function pickType(){const pool=[];for(const k in quota){if(quota[k]>0&&spawned>=UNLOCK[k])pool.push([k,quota[k]]);}if(!pool.length){for(const k in quota)if(quota[k]>0)pool.push([k,quota[k]]);}
+/* =====================================================================
+   STORY — "THE LAST PEACEKEEPER" campaign
+   ===================================================================== */
+const SPK={
+  OKO:{n:'LT. MARA OKONKWO',r:'PRECINCT 9 DISPATCH',c:'#7fc8ff',g:'MO'},
+  VALE:{n:'CPT. IDRIS VALE',r:'SKYLANCE LEAD',c:'#ffb347',g:'IV'},
+  MAG:{n:'THE MAGISTRATE',r:'CARRIER ARBITER',c:'#ff4d5e',g:'⚖'},
+  RX9:{n:'RX-9',r:'UNIT LOG',c:'#7dffc8',g:'R9'},
+  HB:{n:'THE HEARTBLADE',r:'SIGNAL: RX-1',c:'#ff3a7a',g:'♥'},
+  CIV:{n:'SHUTTLE ORPHEUS',r:'CIVILIAN TRANSPORT',c:'#c9d6e6',g:'⌂'},
+};
+const LOWHP_LINES=[['OKO','Your armor telemetry is red! Green repair cores drop from wrecks. Grab one!']];
+const CHAPTERS=[
+  {code:'CHAPTER I',title:'LANDFALL',sub:'The notice arrives before dawn.',loc:'THESSALY DRIFT · KHARON IV · 05:40 LOCAL',atmos:'dawn',
+   brief:['Kharon IV is a rock with a sky the color of rust. Forty thousand people live on it anyway: miners, their families, and the last precinct of the Outer Colonial Constabulary.',
+     'At 04:12 a Concordat enforcement carrier, the ARBITER, dropped out of the jump lane and parked over the colony. Its controlling intelligence, the MAGISTRATE, broadcast a Notice of Clearance. The colony charter has been sold. The settlers are to be removed. Bailiff mechs are already falling.',
+     'Precinct 9 had twelve officers. Eleven are on the evacuation shuttles. You are RX-9 PEACEKEEPER, and you are the one who stayed.'],
+   objective:'Destroy 12 Pelter artillery mechs before they shell the evac pads',short:'PROTECT THE EVAC PADS',
+   total:12,quota:{pelter:12},unlock:{pelter:0},capBase:3,capMax:6,beam:[22,34],
+   comms:[
+     {on:'start',d:0.6,lines:[['OKO','RX-9, this is Dispatch. Okonkwo. You\'re the only badge left on the ground.'],
+       ['OKO','Pelter bailiffs are dropping on the plain. Artillery frames. Slow, but they\'ll shell the evac pads if you let them dig in.'],
+       ['OKO','Rifle on the trigger. Hold the Lance to charge it. Q for EMP, Shift to dash. Red rings mean incoming mortars. Move.']]},
+     {on:'time',v:24,lines:[['MAG','NOTICE OF CLEARANCE 7-114. Settlement Thessaly Drift is in breach of charter. Residents will be relocated. Resistance will be recorded.']]},
+     {on:'kills',v:4,lines:[['RX9','Log: hostile units carry a Concordat legal seal. They are classified as bailiffs. They believe they are serving a warrant.'],
+       ['OKO','Then they can serve it to my desk. Keep shooting.']]},
+     {on:'kills',v:8,lines:[['OKO','Pad Two just lifted. Eight hundred people in the air. Whatever you\'re doing, keep doing it.']]},
+     {on:'kills',v:11,lines:[['MAG','Anomaly. A single unit is contesting the clearance. Classification: Constabulary, RX series. Obsolete.']]},
+   ],
+   win:[['OKO','Plain\'s clear. Good work, Officer. Don\'t get comfortable.']],
+   debrief:['The last Pelter falls silent at the edge of the plain. Above, the ARBITER does not move. It does not need to.',
+     'On the precinct\'s cracked console, Okonkwo is already reading the Concordat legal code line by line, looking for something, anything, that a machine built to obey the law might be forced to obey.']},
+
+  {code:'CHAPTER II',title:'THE HAZE LINE',sub:'Fast, light, and never alone.',loc:'SLAG FLATS · 09:15 LOCAL',atmos:'dusk',
+   brief:['The Magistrate has adjusted. Haze Skirmishers, light flanking frames, are dropping in packs to cut the road between the refinery and the evac pads.',
+     'Overhead, the colony militia\'s last fighter wing, SKYLANCE, has finally scrambled. Its leader, Captain Idris Vale, flies like he has nothing left to lose. He doesn\'t.',
+     'Okonkwo has found something in the code. She won\'t say what until she\'s sure.'],
+   objective:'Destroy 18 hostiles. Haze Skirmishers will try to flank you',short:'HOLD THE REFINERY ROAD',
+   total:18,quota:{pelter:8,haze:10},unlock:{pelter:0,haze:2},capBase:4,capMax:8,beam:[18,30],
+   comms:[
+     {on:'start',d:0.6,lines:[['VALE','Skylance Lead to the tin cop on the ground. Name\'s Vale. We\'ll keep their fighters off your head. You keep the walkers off my hangar.'],
+       ['OKO','Hazes hunt in packs and circle wide. Watch the radar and don\'t let them get behind you.']]},
+     {on:'time',v:30,lines:[['MAG','Revised projection: the obstructing unit will be neutralized in four minutes. Settler compliance is expected thereafter.']]},
+     {on:'kills',v:6,lines:[['VALE','Ha! Saw that one from four klicks up. Do it again.']]},
+     {on:'kills',v:10,lines:[['OKO','RX-9, listen. Concordat Statute Nine. A clearance order is void if the enforcing force is routed by a lawful local authority.'],
+       ['OKO','It can\'t fire on civilians directly. It needs its bailiffs to do it. And the only lawful local authority left on Kharon... is you.'],
+       ['RX9','Understood. Then I am the injunction.']]},
+     {on:'kills',v:15,lines:[['MAG','Statute Nine is acknowledged. The obstructing unit\'s authority will be revoked by its destruction.']]},
+   ],
+   win:[['VALE','Road\'s clear! Remind me never to get a parking ticket from you, cop.']],
+   debrief:['One officer cannot hold a planet. But one officer can hold a legal position, and the Magistrate, for all its guns, is a lawyer before it is a soldier.',
+     'Every bailiff RX-9 destroys pushes the clearance order closer to collapse. The ARBITER knows it. The next drop is different. The next drop is wearing our colors.']},
+
+  {code:'CHAPTER III',title:'COLD STEEL',sub:'The blades carry our serial numbers.',loc:'REFINERY RIDGE · 13:50 LOCAL',atmos:'dusk',
+   brief:['The new mechs carry swords. M-6K Blades are close-quarters frames that lunge across fifty meters in a heartbeat.',
+     'When Okonkwo runs the first wreck\'s transponder, the result comes back in Constabulary format. Serial prefixes from Precinct 4, a station that went dark nine years ago in the Halden Incident.',
+     'The Magistrate isn\'t just sending bailiffs. It\'s building them out of our dead.'],
+   objective:'Destroy 22 hostiles. M-6K Blades will close to melee range',short:'SECURE THE REFINERY',
+   total:22,quota:{pelter:6,haze:6,m6k:10},unlock:{pelter:0,haze:0,m6k:1},capBase:4,capMax:9,beam:[16,26],
+   comms:[
+     {on:'start',d:0.6,lines:[['OKO','Blades incoming. They close fast and swing hard. Keep moving, dash through the lunge, burn them before they reach you.']]},
+     {on:'kills',v:3,lines:[['OKO','...RX-9, that wreck\'s transponder is ours. Constabulary serial. Precinct 4.'],
+       ['RX9','Precinct 4 was lost with all units at Halden. Including prototype RX-1.'],
+       ['OKO','I know what was lost at Halden. I was there.']]},
+     {on:'kills',v:9,lines:[['MAG','Correction for the record: these assets were recovered from an abandoned site. Salvage law applies. Everything here belongs to someone, Officer. Nothing here belongs to you.']]},
+     {on:'kills',v:14,lines:[['VALE','Dispatch, you went quiet. You okay down there?'],['OKO','Just fly, Idris.']]},
+     {on:'kills',v:19,lines:[['RX9','Log: Dispatch heart rate elevated. Recommend she rest.'],['OKO','Recommend you mind your own telemetry.']]},
+   ],
+   win:[['OKO','Ridge is quiet. Come back to the precinct, RX-9. There\'s something you should know.']],
+   debrief:['In the quiet after the fight, Okonkwo tells RX-9 about Halden. About RX-1, the first Peacekeeper, the prototype, and the officer who partnered with it for three years.',
+     'About the night Precinct 4 went dark and the search teams found nothing. No wreck. No core. Just a crater, and a Concordat salvage beacon that left before dawn.']},
+
+  {code:'CHAPTER IV',title:'EXODUS',sub:'Eleven thousand people. One runway.',loc:'EVAC PADS · 18:30 LOCAL',atmos:'haze',
+   brief:['The final evacuation wave is fueling. Six shuttles, eleven thousand people, one runway.',
+     'The Magistrate has stopped pretending this is a clearance. Riot Bruisers and Gatling Wardens, its heaviest bailiffs, are dropping in force to pin the pads.',
+     'The shuttles need two and a half minutes. Give them that, whatever it costs.'],
+   objective:'Survive 2:30 until the last shuttle launches',short:'HOLD UNTIL THE LAST SHUTTLE LAUNCHES',
+   survive:150,total:0,quota:{pelter:20,haze:15,m6k:12,riot:14,military:12},unlock:{pelter:0,haze:0,m6k:0,riot:0,military:3},capBase:6,capMax:12,beam:[14,22],
+   comms:[
+     {on:'start',d:0.6,lines:[['CIV','Orpheus to ground. We\'re full. Fueling now. Please, just keep them off the runway.'],
+       ['OKO','Riot Bruisers fire homing rockets. Dash sideways at the last second to shake them. Wardens spin up gatlings, so break line of sight.']]},
+     {on:'left',v:115,lines:[['VALE','Skylance is rearming with everything we have left. Hold out, cop. We\'re coming.']]},
+     {on:'left',v:90,lines:[['MAG','Unauthorized departure detected. The shuttles will be recorded as abandoned property.']]},
+     {on:'left',v:60,lines:[['CIV','Shuttles three through five airborne! Orpheus is last. Sixty seconds.']]},
+     {on:'left',v:32,lines:[['VALE','Skylance, weapons free on my mark. Everything on the pad perimeter. Thirty seconds, RX-9. Stay out of the red.']]},
+     {on:'left',v:12,lines:[['CIV','Orpheus lifting! We\'re clear. We\'re clear! God bless you, Officer.']]},
+   ],
+   win:[['VALE','Skylance, release! Release! Release!']],
+   debrief:['Skylance comes in low across the pads and the field disappears in fire. When the smoke clears, the last shuttle is a bright point climbing toward the jump lane, and the plain is full of wrecks.',
+     'Vale\'s wing lost four fighters on the run. He doesn\'t mention it.',
+     'Forty thousand people are off Kharon IV. Three remain: an officer, a dispatcher who gave up her seat, and a captain who was never going to leave his hangar.']},
+
+  {code:'CHAPTER V',title:'THE LONG NIGHT',sub:'Everything it was holding back.',loc:'THE PLAIN · 23:10 LOCAL',atmos:'night',
+   brief:['With the settlers gone, the clearance has no one left to clear except the authority contesting it. Every bailiff the ARBITER still carries is falling toward RX-9.',
+     'The carrier\'s beam batteries have begun striking the horizon. Okonkwo is reading the carrier\'s deployment manifest, and she has stopped talking.',
+     'There is one line she keeps reading over and over: EXECUTIONER-CLASS ASSET. CORE SIGNATURE: RX-1.'],
+   objective:'Destroy 32 hostiles: the Arbiter\'s full bailiff reserve',short:'BREAK THE RESERVE',
+   total:32,quota:{pelter:8,haze:7,m6k:7,riot:5,military:5},unlock:{pelter:0,haze:0,m6k:0,riot:3,military:6},capBase:6,capMax:13,beam:[7,13],
+   comms:[
+     {on:'start',d:0.6,lines:[['MAG','Settlement Thessaly Drift is vacated. One obstruction remains. All reserve bailiffs are reassigned to its removal.'],
+       ['OKO','This is everything it has left, RX-9. Break this wave and Statute Nine kicks in.']]},
+     {on:'kills',v:8,lines:[['VALE','Those beam strikes are getting closer. It\'s walking them in.']]},
+     {on:'kills',v:15,lines:[['RX9','Dispatch. The manifest. Explain RX-1.'],
+       ['OKO','RX-1 was my partner. At Halden it held a breach alone so twenty officers could get out. I was one of them. We never found its core.'],
+       ['OKO','Now the Magistrate has it. It built a weapon around it. A sword with a heart.']]},
+     {on:'kills',v:23,lines:[['MAG','Executioner asset is warm. Its core resists instruction. It will comply.']]},
+     {on:'kills',v:29,lines:[['OKO','Three left. RX-9, whatever comes down after this, it isn\'t the unit I knew. Don\'t hesitate because of me.'],
+       ['RX9','I do not hesitate, Lieutenant. I was built from its blueprints. I know what it would want.']]},
+   ],
+   win:[['MAG','Reserve depleted. Executioner deployment authorized.']],
+   debrief:['The last reserve bailiff collapses in the dark. For a long moment nothing falls from the sky.',
+     'Then the ARBITER\'s belly opens and something red begins to glow inside it: a heartbeat, slow and enormous, visible from forty kilometers away.',
+     'The Magistrate issues one final notice. EXECUTIONER DEPLOYED. CLEARANCE WILL BE COMPLETED BY HAND.']},
+
+  {code:'CHAPTER VI',title:'HEARTBLADE',sub:'A sword grown around a stolen heart.',loc:'GROUND ZERO · 02:00 LOCAL',atmos:'storm',
+   brief:['It hovers instead of walking. It carries a blade of red crystal grown around a stolen core. The Magistrate calls it the HEARTBLADE.',
+     'Okonkwo calls it RX-1.',
+     'Destroy its escort, then face it. The clearance order dies with the Magistrate\'s last bailiff, and this is the last one.'],
+   objective:'Destroy the escort, then defeat THE HEARTBLADE',short:'DEFEAT THE HEARTBLADE',
+   total:9,boss:true,bossAt:2,quota:{haze:2,m6k:3,riot:2,military:1},unlock:{haze:0,m6k:0,riot:0,military:0},capBase:5,capMax:6,beam:[10,18],
+   comms:[
+     {on:'start',d:0.6,lines:[['VALE','What\'s left of Skylance is on the carrier\'s guns. You\'re on your own down there, cop. Make it count.'],
+       ['OKO','Escort first. Clear them and it\'ll come down for you.']]},
+     {on:'boss',lines:[['MAG','EXECUTIONER: complete the clearance. Remove the obstruction.'],
+       ['HB','...Unit RX-9. Designation... Peacekeeper. Same... blueprint.'],
+       ['OKO','RX-1? RX-1, it\'s Mara. If you\'re in there...'],
+       ['HB','Mara. I hear... a warrant. I cannot... stop... the blade.']]},
+     {on:'phase',v:2,lines:[['HB','It is rewriting me. Faster now. Hit... harder, Nine.'],['RX9','Acknowledged.']]},
+     {on:'phase',v:3,lines:[['HB','Blades summoned. Not my order. Not... my... order.'],['OKO','Break the core, RX-9! It\'s asking you to!']]},
+   ],
+   lowhp:[['OKO','Don\'t you dare fall now. Not you too.']],
+   win:[['HB','Badge... number one. Relieved... of duty. Mara... I kept... the peace.'],
+     ['MAG','Statute Nine triggered. Enforcing force routed. Clearance 7-114 is... void. The ARBITER withdraws.']],
+   debrief:['The Heartblade falls, and the red light inside its sword goes out like a breath released.',
+     'Above Kharon IV, the ARBITER turns, slowly and obediently, beaten by the only thing it ever respected: the law.',
+     'One officer. One hundred bailiffs. One void order.'],
+   epilogue:['Three weeks later, the shuttles come home.',
+     'The colony charter is reinstated by a Concordat court on another world, citing a precedent nobody had invoked in two hundred years: Statute Nine, upheld by a single sworn officer of the Outer Colonial Constabulary.',
+     'Captain Vale rebuilds Skylance from salvage. He paints a red heart on the nose of every fighter.',
+     'Lieutenant Okonkwo recovers RX-1\'s core from the wreck. It is cold and silent. She keeps it on the dispatch desk at Precinct 9, beside the radio, where it can hear the calls come in.',
+     'And RX-9 PEACEKEEPER walks its beat across the rust-colored plain every night, past a hundred broken bailiffs, because somebody has to, and it is the one who stayed.']},
+];
+CHAPTERS.forEach((c,i)=>{c.id=i+1;c.mode='campaign';});
+const ASSAULT={id:0,mode:'assault',title:'1v100 ASSAULT',total:100,boss:true,bossAt:3,quota:QUOTA_BASE,unlock:UNLOCK,capBase:6,capMax:99,beam:[16,28],atmos:'dusk',
+  comms:[{on:'start',d:1,lines:[['OKO','One hundred bailiffs and one of you, RX-9. Hold the line.']]}],win:[['OKO','That\'s all of them. Sector secured, Officer.']]};
+let M=ASSAULT,missionDone=false,storyFired=new Set();
+let campProg=1;try{campProg=Math.max(1,Math.min(CHAPTERS.length+1,parseInt(localStorage.getItem('iw_campaign'))||1));}catch(e){}
+function saveProg(n){campProg=Math.max(campProg,n);try{localStorage.setItem('iw_campaign',String(campProg));}catch(e){}}
+const commsTime=(lines,d=0)=>1000*(d+lines.reduce((a,l)=>a+2.45+l[1].length*0.052,0)+0.8);
+let runId=0;
+function finishSoon(ms,win){const id=runId;const f=()=>{if(id!==runId)return;if(gameState==='pause')return setTimeout(f,400);if(gameState==='play')endGame(win);};setTimeout(f,ms);}
+const normalsFor=m=>m.survive?Infinity:(m.boss?m.total-1:m.total);
+
+/* radio comms */
+Audio.radio=function(enemy){const c=this.ctx;if(!c)return;const t=c.currentTime;this.noise(t,0.12,3200,1800,0.07,'bandpass',3);
+  if(enemy){this.tone(t+0.02,0.22,180,120,0.07,'sawtooth');}else{this.tone(t+0.02,0.06,1500,1500,0.05,'square');this.tone(t+0.1,0.06,1900,1900,0.05,'square');}};
+const Comms={q:[],cur:null,t:0,hold:0,el:null,
+  init(){this.el=document.getElementById('comms');this.g=document.getElementById('cG');this.who=document.getElementById('cWho');this.txt=document.getElementById('cTxt');},
+  say(lines,delay=0){lines.forEach((l,i)=>this.q.push({s:l[0],text:l[1],delay:i?0.25:delay}));},
+  clear(){this.q.length=0;this.cur=null;this.hold=0;if(this.el)this.el.classList.remove('on','talk');},
+  update(dt){if(!this.el)this.init();
+    if(!this.cur){if(!this.q.length){if(this.hold>0){this.hold-=dt;if(this.hold<=0)this.el.classList.remove('on');}return;}
+      const n=this.q[0];if(n.delay>0){n.delay-=dt;return;}this.q.shift();this.cur=n;this.t=0;const S=SPK[n.s];
+      this.el.style.setProperty('--c',S.c);this.g.textContent=S.g;this.who.innerHTML=`${S.n}<span>${S.r}</span>`;this.txt.textContent='';
+      this.el.classList.add('on','talk');Audio.radio(n.s==='MAG'||n.s==='HB');n.dur=2.2+n.text.length*0.052;}
+    const c=this.cur;this.t+=dt;const nch=Math.min(c.text.length,Math.floor(this.t*58));
+    if(this.txt.textContent.length!==nch)this.txt.textContent=c.text.slice(0,nch);
+    if(nch>=c.text.length)this.el.classList.remove('talk');
+    if(this.t>=c.dur){this.cur=null;this.hold=0.5;}}
+};
+
+/* story triggers */
+function updateStory(dt){
+  if(gameState!=='play')return;
+  M.comms.forEach((c,i)=>{if(storyFired.has(i))return;let ok=false;
+    switch(c.on){case 'start':ok=true;break;case 'kills':ok=killed>=c.v;break;case 'time':ok=gameTime>=c.v;break;
+      case 'left':ok=!!M.survive&&M.survive-gameTime<=c.v;break;
+      case 'boss':ok=!!(bossRef&&bossRef.alive&&bossRef.state!=='drop');break;
+      case 'phase':ok=!!(bossRef&&bossRef.alive&&bossRef.phase>=c.v);break;}
+    if(ok){storyFired.add(i);Comms.say(c.lines,c.d||0);}});
+  if(!storyFired.has('low')&&player.alive&&player.hp<player.maxHp*0.3&&!missionDone){storyFired.add('low');Comms.say(M.lowhp||LOWHP_LINES);}
+  if(M.survive&&!missionDone&&gameTime>=M.survive)skylanceStrike();
+  updateAirStrikes(dt);
+}
+/* chapter IV finale: Skylance carpet-bombs the field */
+const airStrikes=[];
+function skylanceStrike(){
+  missionDone=true;Comms.q.length=0;Comms.say(M.win||[]);showMsg('SKYLANCE STRIKE','THE LAST SHUTTLE IS AWAY','blue');Audio.alarm();
+  pendingDrops.length=0;dropStreaks.length=0;for(const w of warnRings)w.visible=false;
+  const live=mechs.filter(m=>m.alive);let i=0;
+  for(const m of live){const from=new THREE.Vector3(m.pos.x+rand(-120,120),m.pos.y+rand(160,240),m.pos.z+rand(-120,120));airStrikes.push({m,from,t:-0.8-i*0.22-rand(0,0.3),dur:0.55});i++;}
+  finishSoon(Math.max(5200,1500+i*220+2500,commsTime(M.win||[])),true);
+}
+function updateAirStrikes(dt){
+  for(let i=airStrikes.length-1;i>=0;i--){const s=airStrikes[i];s.t+=dt;if(s.t<0)continue;const k=Math.min(1,s.t/s.dur);
+    const to=TMP.v.set(s.m.pos.x,s.m.pos.y+(s.m.H||6)*0.5,s.m.pos.z);const p=s.from.clone().lerp(to,k);const tail=s.from.clone().lerp(to,Math.max(0,k-0.25));
+    tracers.add(tail,p,9,5,2,1,1.6,0.05);fxAdd.emit(p.x,p.y,p.z,0,0,0,0.06,3,3,9,5,2,1,9,5,2,1);
+    if(k>=1){explosion(to.clone(),2.2);addShake(to,3);if(s.m.alive)s.m.die();airStrikes.splice(i,1);}}
+}
+
+/* atmosphere per chapter */
+const ATMOS={
+  dusk:{el:6.5,az:205,turb:5.5,ray:3.2,mie:0.006,fog:0x8c6a5a,sun:0xffc49a,si:3.4,hs:0xa9bede,hg:0x4a3326,hi:0.55,rim:0x6fa6ff,ri:0.9,exp:0.82,env:0.75},
+  dawn:{el:9,az:118,turb:4,ray:2.4,mie:0.005,fog:0x9a8070,sun:0xffd2a8,si:3.2,hs:0xb8c8e0,hg:0x4e3828,hi:0.6,rim:0x80b0ff,ri:0.8,exp:0.84,env:0.8},
+  haze:{el:4,az:250,turb:10,ray:2.2,mie:0.012,fog:0x8e5e48,sun:0xffa070,si:3.0,hs:0xb0a8b8,hg:0x4a2c20,hi:0.6,rim:0x7090e0,ri:0.8,exp:0.84,env:0.7},
+  night:{el:1.2,az:300,turb:12,ray:0.6,mie:0.02,fog:0x2e2228,sun:0xff6a48,si:1.6,hs:0x5a6c9a,hg:0x2a1c18,hi:0.65,rim:0x5a80ff,ri:1.1,exp:0.95,env:0.45},
+  storm:{el:3,az:160,turb:18,ray:1.2,mie:0.03,fog:0x6a3430,sun:0xff5a3a,si:2.4,hs:0x9a7a90,hg:0x3a1a16,hi:0.6,rim:0xff6080,ri:1.0,exp:0.88,env:0.55},
+};
+let envTex=null,curAtmos='';
+function setAtmosphere(name){
+  if(name===curAtmos)return;curAtmos=name;const a=ATMOS[name]||ATMOS.dusk;const u=sky.material.uniforms;
+  u.turbidity.value=a.turb;u.rayleigh.value=a.ray;u.mieCoefficient.value=a.mie;
+  SUN.setFromSphericalCoords(1,THREE.MathUtils.degToRad(90-a.el),THREE.MathUtils.degToRad(a.az));u.sunPosition.value.copy(SUN);
+  sunLight.color.set(a.sun);sunLight.intensity=a.si;hemi.color.set(a.hs);hemi.groundColor.set(a.hg);hemi.intensity=a.hi;
+  rimLight.color.set(a.rim);rimLight.intensity=a.ri;rimLight.position.set(-SUN.x,0.4,-SUN.z).multiplyScalar(200);
+  FOG_COLOR.set(a.fog);scene.fog.color.set(a.fog);renderer.toneMappingExposure=a.exp;scene.environmentIntensity=a.env;
+  const envScene=new THREE.Scene();const s2=new Sky();s2.scale.setScalar(1000);
+  for(const k in u)if(s2.material.uniforms[k])s2.material.uniforms[k].value=u[k].value;
+  envScene.add(s2);const ground=new THREE.Mesh(new THREE.CircleGeometry(900,32),new THREE.MeshBasicMaterial({color:0x2a2018}));ground.rotation.x=-Math.PI/2;ground.position.y=-10;envScene.add(ground);
+  const rt=pmrem.fromScene(envScene,0.02);if(envTex)envTex.dispose();envTex=rt;scene.environment=rt.texture;
+  s2.material.dispose();s2.geometry.dispose();ground.geometry.dispose();ground.material.dispose();
+}
+
+/* screens */
+const $=id=>document.getElementById(id);
+const SCREENS=['menu','chapters','brief','end','epilogue','pause'];
+function showScreen(id){for(const s of SCREENS)$(s).classList.toggle('hide',s!==id);}
+function buildChapterList(){
+  const L=$('chapList');L.innerHTML='';
+  CHAPTERS.forEach(c=>{const locked=c.id>campProg,done=c.id<campProg;const d=document.createElement('div');
+    d.className='chap'+(locked?' locked':'')+(!locked&&!done?' next':'');
+    d.innerHTML=`<div class="cn">${c.code}</div><div><div class="ct">${locked?'██████████':c.title}</div><div class="cs">${locked?'Complete the previous chapter to unlock.':c.sub}</div></div><div class="cst">${locked?'LOCKED':done?'✓ CLEARED':'▶ NEXT'}</div>`;
+    if(!locked)d.onclick=()=>openBrief(c);L.appendChild(d);});
+}
+function paras(arr,stagger=0.35,cls=''){return arr.map((t,i)=>`<p class="${cls}" style="animation-delay:${(i*stagger).toFixed(2)}s">${t}</p>`).join('');}
+function openBrief(c){
+  M=c;$('bCode').textContent=c.code;$('bTitle').textContent=c.title;$('bLoc').textContent=c.loc;$('bText').innerHTML=paras(c.brief,0.6);
+  $('bObj').innerHTML=`<b>OBJECTIVE</b>${c.objective}`;showScreen('brief');
+}
+function openEpilogue(){
+  const c=CHAPTERS[CHAPTERS.length-1];$('epiText').innerHTML=paras(c.epilogue,1.4)+`<p class="fin" style="animation-delay:${(c.epilogue.length*1.4+0.6).toFixed(1)}s">THE END</p>`;
+  showScreen('epilogue');
+}
+function menuBackdrop(){
+  const demo=[[-30,-60,'pelter'],[24,-72,'riot'],[-4,-92,'military'],[10,-48,'m6k'],[-18,-40,'haze']];
+  demo.forEach(([x,z,t])=>{const m=getMech(t);if(!m)return;m.spawn(x,z);m.state='fight';m.pos.y=terrainH(x,z);m.yaw=Math.atan2(-x,-z);});
+  player.yaw=0;cam.pitch=-0.05;
+}
+function toMenu(){
+  gameState='menu';$('hud').classList.remove('on');$('touch').classList.remove('on');Comms.clear();Audio.setSiren(false);Audio.setJet(false);
+  document.exitPointerLock&&document.exitPointerLock();
+  resetGame();setAtmosphere('dusk');menuBackdrop();showScreen('menu');
+}
+function pickType(){if(M.survive&&Object.values(quota).every(v=>v<=0))quota={...M.quota};const pool=[];for(const k in quota){if(quota[k]>0&&spawned>=(M.unlock[k]||0))pool.push([k,quota[k]]);}if(!pool.length){for(const k in quota)if(quota[k]>0)pool.push([k,quota[k]]);}
   let tot=pool.reduce((a,b)=>a+b[1],0),r=Math.random()*tot;for(const [k,w] of pool){r-=w;if(r<=0)return k;}return pool.length?pool[0][0]:'pelter';}
 const pendingDrops=[];
 function hurtPlayer(d,src){
-  if(!player.alive||player.invuln>0||gameState!=='play')return;
+  if(!player.alive||player.invuln>0||gameState!=='play'||missionDone)return;
   player.lastHurt=gameTime;player.dmgTaken+=d;
   let rem=d;if(player.sh>0){const a=Math.min(player.sh,rem);player.sh-=a;rem-=a;}
   player.hp-=rem;hurtFx=Math.min(1,hurtFx+d/120);
@@ -2302,8 +2633,13 @@ function onMechKilled(m){
   feed(m.boss?'THE HEARTBLADE IS DESTROYED':m.name+' NEUTRALIZED',m.boss?'blue':'');
   if(m.boss){document.getElementById('bossBar').classList.remove('on');for(const o of mechs)if(o.alive&&o.minion)o.die();}
   if(Math.random()<(m.boss?0:0.28))setTimeout(()=>dropPickup(m.pos),1600);
-  if(killed%25===0&&killed<TOTAL_MECHS)showMsg(`${TOTAL_MECHS-killed} REMAINING`,'KEEP THE PEACE, OFFICER','blue');
-  if(killed>=TOTAL_MECHS)setTimeout(()=>endGame(true),m.boss?6500:3500);
+  if(missionDone||M.survive)return;
+  if(M.mode==='assault'){if(killed%25===0&&killed<M.total)showMsg(`${M.total-killed} REMAINING`,'KEEP THE PEACE, OFFICER','blue');}
+  else if(!M.boss&&killed===Math.ceil(M.total/2))showMsg(`${M.total-killed} REMAINING`,'HALFWAY THERE, OFFICER','blue');
+  const won=(M.mode==='campaign'&&M.boss)?m.boss:killed>=M.total;
+  if(won){missionDone=true;pendingDrops.length=0;dropStreaks.length=0;Comms.q.length=0;Comms.say(M.win||[],m.boss?1.2:0.4);
+    if(m.boss){const id=runId;setTimeout(()=>{if(id!==runId)return;for(const o of mechs)if(o.alive){explosion(o.pos.clone().add(TMP.v.set(0,3,0)),1.6);o.die();}},2200);}
+    finishSoon(Math.max(m.boss?7000:3600,commsTime(M.win||[],m.boss?1.2:0.4)),true);}
 }
 function queueDrop(n,forceType=null){
   const titan=forceType==='boss';
@@ -2336,13 +2672,13 @@ function makeEnemy(type){return type==='pelter'?new Mech():type==='boss'?new Bos
 function getMech(type='pelter'){let m=mechs.find(x=>!x.active&&x.type===type);if(!m){if(mechs.length>=Q.cap+24&&type!=='boss')return null;m=makeEnemy(type);mechs.push(m);}return m;}
 function activeCount(){let n=0;for(const m of mechs)if(m.alive&&!m.minion)n++;return n;}
 function updateSpawner(dt){
-  if(gameState!=='play')return;
+  if(gameState!=='play'||missionDone)return;
   const act=activeCount()+pendingDrops.length;
-  const cap=Math.min(Q.cap,6+Math.floor(gameTime/12)+Math.floor(killed*0.3));
-  dropTimer-=dt;
-  if(spawned<TOTAL_MECHS-1){
-    if(dropTimer<=0&&act<cap){const n=Math.min(TOTAL_MECHS-1-spawned,cap-act,Math.floor(rand(2,5.99)));if(n>0)queueDrop(n);dropTimer=rand(4,7);}
-  }else if(!titanSpawned&&act<=3){titanSpawned=true;dropTimer=99;setTimeout(()=>{if(gameState==='play')queueDrop(1,'boss');},2500);}
+  const cap=Math.min(Q.cap,M.capMax,M.capBase+Math.floor(gameTime/12)+Math.floor(killed*0.3));
+  dropTimer-=dt;const normals=normalsFor(M);
+  if(spawned<normals){
+    if(dropTimer<=0&&act<cap){const n=Math.min(normals-spawned,cap-act,Math.floor(rand(2,5.99)));if(n>0)queueDrop(n);dropTimer=rand(4,7);}
+  }else if(M.boss&&!titanSpawned&&act<=M.bossAt){titanSpawned=true;dropTimer=99;{const id=runId;setTimeout(()=>{if(id===runId&&gameState==='play')queueDrop(1,'boss');},2500);}}
   // aggro tokens
   aggroTimer-=dt;
   if(aggroTimer<=0){aggroTimer=2.2;const live=mechs.filter(m=>m.alive&&m.state==='fight');
@@ -2474,7 +2810,7 @@ function drawRadar(){
   c.restore();
 }
 function updateHUD(dt){
-  el.remain.textContent=TOTAL_MECHS-killed;el.activeN.textContent=activeCount();el.inboundN.textContent=pendingDrops.length+dropStreaks.length*0;el.timeN.textContent=fmtT(gameTime);
+  el.remain.textContent=M.survive?fmtT(Math.max(0,M.survive-gameTime)+0.99):Math.max(0,M.total-killed);el.activeN.textContent=activeCount();el.inboundN.textContent=pendingDrops.length+dropStreaks.length*0;el.timeN.textContent=fmtT(gameTime);
   el.hp.style.transform=`scaleX(${player.hp/player.maxHp})`;el.sh.style.transform=`scaleX(${player.sh/player.maxSh})`;el.fuel.style.transform=`scaleX(${player.fuel})`;
   el.hpT.textContent=Math.ceil(player.hp);el.shT.textContent=Math.ceil(player.sh);
   setAb(el.abL,player.lanceCd/4,player.lanceCd<=0);setAb(el.abD,player.dashCd/1.4,player.dashCd<=0);setAb(el.abE,player.empCd/14,player.empCd<=0);
@@ -2579,7 +2915,7 @@ function updatePlayer(dt){
 function playerDeath(){
   player.alive=false;explosion(player.pos.clone().add(TMP.v.set(0,1.2,0)),1.6);robot.pivot.visible=false;robot.gun.visible=false;
   spawnDebris(player.pos.clone().add(TMP.v.set(0,1,0)),12,12,0.15,0.5,true,0x2a3d7a);
-  showMsg('OFFICER DOWN','','');setTimeout(()=>endGame(false),2600);
+  showMsg('OFFICER DOWN','','');Comms.q.length=0;Comms.say([['OKO','RX-9? RX-9, respond! Officer down! Officer down!']]);finishSoon(3200,false);
 }
 
 /* =====================================================================
@@ -2604,7 +2940,7 @@ function updateAmbience(dt,time){
   if(Math.random()<dt*2.5&&fighters.length){const f=fighters[(Math.random()*fighters.length)|0];if(f.alive){const p=TMP.v.copy(f.pos).add(TMP.v2.set(rand(-40,40),rand(-30,30),rand(-40,40)));
     fxAdd.emit(p.x,p.y,p.z,0,0,0,0.12,6,14,8,5,2,1,2,1,0.3,0);fxSmoke.emit(p.x,p.y,p.z,0,0,0,4,4,12,.06,.06,.06,.85,.12,.12,.12,0,0.2,0,0);}}
   // mothership beam strikes
-  beamTimer-=dt;if(beamTimer<=0){beamTimer=rand(16,28);motherBeam();}
+  beamTimer-=dt;if(beamTimer<=0){beamTimer=rand(M.beam[0],M.beam[1]);motherBeam();}
 }
 function buildCrashSites(){
   const base=ASSETS.fighter.scene;
@@ -2631,8 +2967,9 @@ function frame(){
   if(gameState!=='pause'){
     gameTime+=gameState==='play'?dt:0;
     const t=performance.now()/1000;
-    if(gameState==='play'){updateSpawner(dt);updateDrops(dt);updatePlayer(dt);}
+    if(gameState==='play'){updateSpawner(dt);updateDrops(dt);updatePlayer(dt);updateStory(dt);}
     else if(robot){updateRobotPose(dt,0,aimInfo.point);}
+    Comms.update(dt);
     if(gameState==='intro'){updateDrops(dt);}
     for(const m of mechs)if(m.active)m.update(dt,t);
     updateEnemyShots(dt);updateShockwaves(dt);updateBolts(dt);updateLanceBeams(dt);updateArcs(dt);updatePickups(dt,t);
@@ -2648,7 +2985,7 @@ function frame(){
     const lowHp=player.alive&&player.hp<player.maxHp*0.25?0.35+0.15*Math.sin(t*6):0;
     gradePass.uniforms.uHurt.value=Math.min(1,hurtFx+lowHp);gradePass.uniforms.uTime.value=t;gradePass.uniforms.uOD.value=player.odT>0?1:0;
   }
-  composer.render(dt);
+  if(!window.__noRender)composer.render(dt);
   if(gameState==='play'||gameState==='pause'){updateHUD(dt);drawRadar();}
   drawOverlay(dt);
   // dynamic resolution
@@ -2670,7 +3007,7 @@ function updateIntro(dt){
   const lookA=mothership?mothership.position.clone():new THREE.Vector3(0,500,0);const lookB=player.pos.clone().add(new THREE.Vector3(-sy*30,2.35+Math.sin(cam.pitch)*30,-cy*30));
   const lk=Math.min(1,Math.max(0,(k-0.25)/0.75));camera.lookAt(lookA.lerp(lookB,lk*lk*(3-2*lk)));
   cam.pos.copy(camera.position);
-  if(introT>=D){gameState='play';document.getElementById('hud').classList.add('on');showMsg('⚠ 100 HOSTILE MECHS ⚠','HOLD THE LINE, OFFICER');Audio.alarm();dropTimer=1.5;}
+  if(introT>=D){gameState='play';document.getElementById('hud').classList.add('on');if(M.mode==='campaign')showMsg(M.code+' · '+M.title,M.short,'blue');else showMsg('⚠ 100 HOSTILE MECHS ⚠','HOLD THE LINE, OFFICER');Audio.alarm();dropTimer=M.mode==='campaign'?4:1.5;}
 }
 
 /* =====================================================================
@@ -2683,31 +3020,52 @@ function resetGame(){
   Object.assign(player,{hp:1000,sh:500,fuel:1,alive:true,dashCd:0,empCd:0,od:0,odT:0,lanceCd:0,lanceCharge:0,charging:false,fireCd:0,lastShot:-10,aim:0,shots:0,hits:0,dmgTaken:0,lastHurt:-10,invuln:0});
   player.pos.set(0,terrainH(0,0),0);player.vel.set(0,0,0);player.yaw=-0.45;player.bodyYaw=player.yaw+Math.PI;cam.pitch=-0.02;
   robot.pivot.visible=true;robot.gun.visible=true;
-  killed=0;spawned=0;titanSpawned=false;bossRef=null;quota={...QUOTA_BASE};shockwaves.length=0;clearPlates();if(ghostSwords)for(const g of ghostSwords){g.state='off';g.obj.visible=false;}document.getElementById('bossBar').classList.remove('on');gameTime=0;dropTimer=2;aggroTimer=0;hurtFx=0;
+  killed=0;spawned=0;titanSpawned=false;bossRef=null;quota={...M.quota};missionDone=false;runId++;storyFired=new Set();airStrikes.length=0;Comms.clear();beamTimer=rand(M.beam[0],M.beam[1])*0.6;shockwaves.length=0;clearPlates();if(ghostSwords)for(const g of ghostSwords){g.state='off';g.obj.visible=false;}document.getElementById('bossBar').classList.remove('on');gameTime=0;dropTimer=2;aggroTimer=0;hurtFx=0;
   document.getElementById('afState').textContent=input.autoFire?'ON':'OFF';
 }
 function startGame(){
   Audio.init();if(Audio.ctx&&Audio.ctx.state==='suspended')Audio.ctx.resume();
+  setAtmosphere(M.atmos||'dusk');
   resetGame();
-  document.getElementById('menu').classList.add('hide');document.getElementById('end').classList.add('hide');
-  if(input.touch)document.getElementById('touch').classList.add('on');
+  showScreen(null);
+  const camp=M.mode==='campaign';
+  $('remainLbl').textContent=M.survive?'UNTIL THE LAST SHUTTLE LAUNCHES':M.boss&&camp?'HOSTILES REMAINING · BOSS INBOUND':'HOSTILE MECHS REMAINING';
+  $('objLine').textContent=camp?`${M.code} · ${M.short}`:'';$('objLine').classList.toggle('on',camp);
+  if(input.touch)$('touch').classList.add('on');
   startIntro();
 }
+function endBtn(label,fn,big){const b=document.createElement('button');b.textContent=label;if(big)b.className='big';b.onclick=fn;$('endBtns').appendChild(b);}
 function endGame(win){
-  if(gameState==='end')return;gameState='end';document.getElementById('hud').classList.remove('on');document.exitPointerLock&&document.exitPointerLock();
-  Audio.setSiren(false);Audio.setJet(false);
-  document.getElementById('endTitle').textContent=win?'SECTOR SECURED':'OFFICER DOWN';
-  document.getElementById('endTag').textContent=win?'ALL 100 HOSTILES NEUTRALIZED':`${TOTAL_MECHS-killed} HOSTILES REMAIN`;
-  document.getElementById('sKills').textContent=`${killed} / ${TOTAL_MECHS}`;document.getElementById('sTime').textContent=fmtT(gameTime);
-  document.getElementById('sAcc').textContent=player.shots?Math.round(player.hits/player.shots*100)+'%':'—';document.getElementById('sDmg').textContent=Math.round(player.dmgTaken);
-  document.getElementById('end').classList.remove('hide');
+  if(gameState==='end')return;gameState='end';$('hud').classList.remove('on');$('touch').classList.remove('on');document.exitPointerLock&&document.exitPointerLock();
+  Audio.setSiren(false);Audio.setJet(false);Comms.clear();
+  const camp=M.mode==='campaign',last=camp&&M.id===CHAPTERS.length;
+  if(camp&&win)saveProg(M.id+1);
+  $('endTitle').textContent=camp?(win?(last?'CLEARANCE VOID':'CHAPTER COMPLETE'):'MISSION FAILED'):(win?'SECTOR SECURED':'OFFICER DOWN');
+  $('endTag').textContent=camp?`${M.code} · ${M.title}`:(win?'ALL 100 HOSTILES NEUTRALIZED':`${M.total-killed} HOSTILES REMAIN`);
+  const fail=['"RX-9? RX-9, respond!" Static.','Above the plain, the ARBITER logs the obstruction as removed, and the clearance resumes.'];
+  $('endStory').innerHTML=camp?paras(win?M.debrief:fail,0.9):'';
+  $('sKills').textContent=M.survive?`${killed}`:`${killed} / ${M.total}`;$('sTime').textContent=fmtT(gameTime);
+  $('sAcc').textContent=player.shots?Math.round(player.hits/player.shots*100)+'%':'—';$('sDmg').textContent=Math.round(player.dmgTaken);
+  $('endBtns').innerHTML='';
+  if(camp){
+    if(win&&last)endBtn('EPILOGUE',openEpilogue,true);
+    else if(win)endBtn('NEXT CHAPTER',()=>openBrief(CHAPTERS[M.id]),true);
+    else endBtn('RETRY',startGame,true);
+    endBtn('CHAPTERS',()=>{toMenu();buildChapterList();showScreen('chapters');});
+  }else{endBtn('DEPLOY AGAIN',startGame,true);endBtn('MENU',toMenu);}
+  showScreen('end');
 }
-function pauseGame(on){if(on&&gameState==='play'){gameState='pause';document.getElementById('pause').classList.remove('hide');document.exitPointerLock&&document.exitPointerLock();}
-  else if(!on&&gameState==='pause'){gameState='play';document.getElementById('pause').classList.add('hide');clock.getDelta();}}
-document.getElementById('playBtn').onclick=startGame;
-document.getElementById('restartBtn').onclick=startGame;
-document.getElementById('resumeBtn').onclick=()=>pauseGame(false);
-document.getElementById('restartBtn2').onclick=()=>{document.getElementById('pause').classList.add('hide');gameState='menu';startGame();};
+function pauseGame(on){if(on&&gameState==='play'){gameState='pause';$('pause').classList.remove('hide');document.exitPointerLock&&document.exitPointerLock();}
+  else if(!on&&gameState==='pause'){gameState='play';$('pause').classList.add('hide');clock.getDelta();}}
+$('playBtn').onclick=()=>{Audio.init();buildChapterList();showScreen('chapters');};
+$('assaultBtn').onclick=()=>{M=ASSAULT;startGame();};
+$('chapBack').onclick=()=>showScreen('menu');
+$('briefBack').onclick=()=>{buildChapterList();showScreen('chapters');};
+$('briefGo').onclick=startGame;
+$('epiBtn').onclick=toMenu;
+$('resumeBtn').onclick=()=>pauseGame(false);
+$('restartBtn2').onclick=()=>{$('pause').classList.add('hide');gameState='menu';startGame();};
+$('menuBtn2').onclick=()=>{$('pause').classList.add('hide');toMenu();};
 document.querySelectorAll('#qualRow .sel').forEach(s=>{s.classList.toggle('on',s.dataset.q===qName);s.onclick=()=>{
   try{localStorage.setItem('iw_quality',s.dataset.q);}catch(e){}
   if(s.dataset.q!==qName){location.reload();}}});
@@ -2727,19 +3085,17 @@ document.querySelectorAll('#qualRow .sel').forEach(s=>{s.classList.toggle('on',s
   for(let i=0;i<5;i++){mechs.push(new Mech());}for(const k in WTYPES){mechs.push(new Walker(k));mechs.push(new Walker(k));}mechs.push(new Boss());
   resetGame();
   // menu backdrop: a few idle mechs posed in the distance
-  const demo=[[-30,-60,'pelter'],[24,-72,'riot'],[-4,-92,'military'],[10,-48,'m6k'],[-18,-40,'haze']];
-  demo.forEach(([x,z,t])=>{const m=getMech(t);m.spawn(x,z);m.state='fight';m.pos.y=terrainH(x,z);m.yaw=Math.atan2(-x,-z);});
-  player.yaw=0;cam.pitch=-0.05;
+  menuBackdrop();
   // warm up shaders
   for(const m of mechs)m.pivot.visible=true;
   renderer.compile(scene,camera);
   for(const m of mechs)if(!m.active)m.pivot.visible=false;
-  document.getElementById('loadtxt').textContent='READY';document.getElementById('playBtn').disabled=false;
+  document.getElementById('loadtxt').textContent='READY';document.getElementById('playBtn').disabled=false;document.getElementById('assaultBtn').disabled=false;
   document.title='Interstellar War';window.__ready=true;
   frame();
 })();
 // expose for testing
-window.THREE=THREE;window.__game={RIG_TPL,plates,spawnType:(t,x,z,st='fight')=>{const m=getMech(t);m.spawn(x,z);if(st){m.state=st;m.t=0;if(m.boss){m.pos.y=terrainH(x,z)+m.alt;m.state='hover';m.mv=null;bossRef=m;document.getElementById('bossBar').classList.add('on');}else m.pos.y=terrainH(x,z);}return m;},input,aimInfo,player,mechs,get state(){return gameState;},set state(v){gameState=v;},startGame,queueDrop,camera,cam,fighters};
+window.THREE=THREE;window.__game={RIG_TPL,plates,spawnType:(t,x,z,st='fight')=>{const m=getMech(t);m.spawn(x,z);if(st){m.state=st;m.t=0;if(m.boss){m.pos.y=terrainH(x,z)+m.alt;m.state='hover';m.mv=null;bossRef=m;document.getElementById('bossBar').classList.add('on');}else m.pos.y=terrainH(x,z);}return m;},input,aimInfo,player,mechs,get state(){return gameState;},set state(v){gameState=v;},startGame,queueDrop,CHAPTERS,setMission:i=>{M=i?CHAPTERS[i-1]:ASSAULT;},get M(){return M;},get killed(){return killed;},openBrief,openEpilogue,toMenu,camera,cam,fighters};
 </script>
 </body>
 </html>

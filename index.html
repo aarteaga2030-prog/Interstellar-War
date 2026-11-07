@@ -2967,8 +2967,8 @@ function frame(){
     gameTime+=gameState==='play'?dt:0;
     const t=performance.now()/1000;
     if(gameState==='play'){updateSpawner(dt);updateDrops(dt);updatePlayer(dt);updateStory(dt);}
-    Comms.update(dt);
     else if(robot){updateRobotPose(dt,0,aimInfo.point);}
+    Comms.update(dt);
     if(gameState==='intro'){updateDrops(dt);}
     for(const m of mechs)if(m.active)m.update(dt,t);
     updateEnemyShots(dt);updateShockwaves(dt);updateBolts(dt);updateLanceBeams(dt);updateArcs(dt);updatePickups(dt,t);
